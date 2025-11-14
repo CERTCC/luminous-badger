@@ -1,0 +1,28 @@
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile-fa.yml
+    container_name: fastapi
+    ports:
+      - "7777:9000"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile-sl.yml
+    container_name: streamlit
+    ports:
+      - "7776:9001"
+    networks:
+      - app-network
+    depends_on:
+      - fastapi
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge

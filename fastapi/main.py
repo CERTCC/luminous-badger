@@ -1,4 +1,5 @@
 from typing import Union
+from datetime import datetime
 
 from fastapi import FastAPI
 
@@ -7,7 +8,11 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {
+        "Hello": "World",
+        "timestamp": datetime.now().isoformat()
+    }
+
 
 
 @app.get("/items/{item_id}")
