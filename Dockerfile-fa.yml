@@ -1,0 +1,18 @@
+FROM python:3.13.9-alpine3.22 AS base
+
+RUN apk update && apk upgrade --no-cache
+
+WORKDIR /app
+COPY fastapi/main.py /app/
+
+# not installing uv because no dependencies list
+
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install "fastapi[standard]"
+
+
+EXPOSE 9000
+
+CMD ["fastapi", "dev", "main.py", \
+     "--host", "0.0.0.0", \
+     "--port", "9000"]
