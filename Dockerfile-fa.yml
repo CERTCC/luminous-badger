@@ -6,7 +6,7 @@ RUN pip install --no-cache-dir --upgrade pip uv
 WORKDIR /app
 COPY . .
 
-RUN uv sync --extra fastapi
+RUN uv sync --extra fastapi --locked 
 
 EXPOSE 9000
 
