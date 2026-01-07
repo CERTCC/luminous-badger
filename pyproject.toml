@@ -1,0 +1,14 @@
+[project]
+name = "aws-deployment-exercise"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+
+[project.optional-dependencies]
+fastapi = [
+    "fastapi[standard]>=0.128.0"
+]
+streamlit = [
+    "streamlit>=1.52.2"
+]
