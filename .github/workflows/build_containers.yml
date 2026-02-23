@@ -3,9 +3,10 @@ on:
   push:
     branches:
       - main
-
+permisions:
+  id-token: write
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -14,11 +15,11 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.ARN }}
-          role-session-name: github-actions
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          id-token: ${{ steps.oidc-token.outputs.token}}
           aws-region: us-east-1
+          role-session-name: github-actions
+          #aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #id-token: ${{ steps.oidc-token.outputs.token}}
       - name: Use AWS credentials
         run: |
-          aws secretsmanager get-secret-value --secret-id my-secret --region us-east-1
+          aws sts get-caller-identity
