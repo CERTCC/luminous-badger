@@ -9,13 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Assume STS role
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-arn: ${{ vars.ARN }}
           role-session-name: github-actions
           oidc-token: ${{ steps.oidc-token.outputs.token}}
+          aws-region: us-east-1
       - name: Use AWS credentials
         run: |
           aws secretsmanager get-secret-value --secret-id my-secret --region us-east-1
