@@ -13,7 +13,7 @@ jobs:
       - name: Assume STS role
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-arn: ${{ variables.ARN }}
+          role-arn: ${{ vars.ARN }}
           role-session-name: github-actions
           oidc-token: ${{ steps.oidc-token.outputs.token}}
       - name: Use AWS credentials
