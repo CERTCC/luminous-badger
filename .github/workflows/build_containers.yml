@@ -11,7 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Assume STS role
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.ARN }}
           role-session-name: github-actions
