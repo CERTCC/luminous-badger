@@ -5,14 +5,15 @@ on:
       - main
 permissions:
   id-token: write
+  contents: read
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
       - name: Assume STS role
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.ARN }}
           aws-region: us-east-1
@@ -23,4 +24,9 @@ jobs:
           #adding a comment to make this diff
       - name: Use AWS credentials
         run: |
-          aws sts get-caller-identity
+          docker build -f Dockerfile-fa.yml -t ${{ steps.login-ecr.outputs.registry }}/fastapi:${{ github.sha }} .
+          docker push ${{ steps.login-ecr.outputs.registry }}/fastapi:${{ github.sha }}
+      - name: Build and push streamlit container
+        run: |
+          docker build -f Dockerfile-sl.yml -t ${{ steps.login-ecr.outputs.registry }}/streamlit:${{ github.sha }} .
+          docker push ${{ steps.login-ecr.outputs.registry }}/streamlit:${{ github.sha }}
