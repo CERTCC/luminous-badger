@@ -20,6 +20,7 @@ jobs:
           #aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           #id-token: ${{ steps.oidc-token.outputs.token}}
+          #adding a comment to make this diff
       - name: Use AWS credentials
         run: |
           aws sts get-caller-identity
