@@ -22,6 +22,7 @@ jobs:
           #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           #id-token: ${{ steps.oidc-token.outputs.token}}
           #adding a comment to make this diff
+          #need an error message
       - name: Use AWS credentials
         run: |
           docker build -f Dockerfile-fa.yml -t ${{ steps.login-ecr.outputs.registry }}/fastapi:${{ github.sha }} .
