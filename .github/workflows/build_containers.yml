@@ -3,12 +3,11 @@ on:
   push:
     branches:
       - main
+permissions:
+  contents: read
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-  permissions:
-    id-token: write
-    contents: read
   steps:
     - name: Checkout code
       uses: actions/checkout@v4
