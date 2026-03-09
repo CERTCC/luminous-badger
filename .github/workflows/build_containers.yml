@@ -23,9 +23,17 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Build and push FastAPI container
         run: |
-          docker build -f Dockerfile-fa.yml -t ${{ steps.login-ecr.outputs.registry }}/fa:${{ github.sha }} .
+          docker build -f Dockerfile-fa.yml \
+            -t ${{ steps.login-ecr.outputs.registry }}/fa:${{ github.sha }} \
+            -t ${{ steps.login-ecr.outputs.registry }}/fa:latest \
+            .
           docker push ${{ steps.login-ecr.outputs.registry }}/fa:${{ github.sha }}
+          docker push ${{ steps.login-ecr.outputs.registry }}/fa:latest
       - name: Build and push streamlit container
         run: |
-          docker build -f Dockerfile-sl.yml -t ${{ steps.login-ecr.outputs.registry }}/sl-image:${{ github.sha }} .
+          docker build -f Dockerfile-sl.yml \
+            -t ${{ steps.login-ecr.outputs.registry }}/sl-image:${{ github.sha }} \
+            -t ${{ steps.login-ecr.outputs.registry }}/sl-image:latest \
+            .
           docker push ${{ steps.login-ecr.outputs.registry }}/sl-image:${{ github.sha }}
+          docker push ${{ steps.login-ecr.outputs.registry }}/sl-image:latest
