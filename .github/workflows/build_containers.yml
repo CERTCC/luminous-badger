@@ -41,5 +41,5 @@ jobs:
         run: |
           aws ecs update-service \
             --cluster streamlit-cluster \
-            --service streamlit-fastapi-task \
+            --service streamlit-service \
             --force-new-deployment
