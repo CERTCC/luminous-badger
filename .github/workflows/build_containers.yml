@@ -37,3 +37,9 @@ jobs:
             .
           docker push ${{ steps.login-ecr.outputs.registry }}/sl-image:${{ github.sha }}
           docker push ${{ steps.login-ecr.outputs.registry }}/sl-image:latest
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service \
+            --cluster streamlit-cluster \
+            --service streamlit-fastapi-task \
+            --force-new-deployment
