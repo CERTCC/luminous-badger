@@ -6,7 +6,7 @@ st.title("hello world")
 
 fastapi_url = st.text_input(
     "FastAPI URL",
-    value="http://fastapi:9000"
+    value="http://localhost:9000"
     )
 
 if st.button("GET from FastAPI"):
