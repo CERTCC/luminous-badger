@@ -9,7 +9,7 @@ app = FastAPI()
 @app.get("/")
 def read_root():
     return {
-        "Hello": "earth",
+        "goodbye": "World",
         "timestamp": datetime.now().isoformat()
     }
 
