@@ -1,5 +1,5 @@
 {
-  "family": "streamlit-task",
+  "family": "streamlit-fastapi-task",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "512",
