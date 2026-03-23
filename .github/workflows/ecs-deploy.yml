@@ -1,0 +1,69 @@
+name: Build and Deploy Containers
+on:
+  push:
+    branches:
+      - main
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Assume STS role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.ARN }}
+          aws-region: us-east-1
+          role-session-name: github-actions
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build and push FastAPI container
+        id: build-fa
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -f Dockerfile-fa.yml \
+            -t $REGISTRY/fa:$IMAGE_TAG \
+            -t $REGISTRY/fa:latest .
+          docker push $REGISTRY/fa:$IMAGE_TAG
+          docker push $REGISTRY/fa:latest
+          echo "image=$REGISTRY/fa:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      - name: Build and push Streamlit container
+        id: build-sl
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -f Dockerfile-sl.yml \
+            -t $REGISTRY/sl-image:$IMAGE_TAG \
+            -t $REGISTRY/sl-image:latest .
+          docker push $REGISTRY/sl-image:$IMAGE_TAG
+          docker push $REGISTRY/sl-image:latest
+          echo "image=$REGISTRY/sl-image:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      - name: Render FastAPI container
+        id: render-fa
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: fa
+          image: ${{ steps.build-fa.outputs.image }}
+      - name: Render Streamlit container
+        id: render-sl
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-fa.outputs.task-definition }}
+          container-name: sl
+          image: ${{ steps.build-sl.outputs.image }}
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-sl.outputs.task-definition }}
+          service: streamlit-service
+          cluster: streamlit-cluster
+          wait-for-service-stability: true
+

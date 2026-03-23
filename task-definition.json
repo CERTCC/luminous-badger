@@ -1,0 +1,32 @@
+{
+  "family": "streamlit-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "fa",
+      "image": "placeholder",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 9000,
+          "protocol": "tcp"
+        }
+      ]
+    },
+    {
+      "name": "sl",
+      "image": "placeholder",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 9001,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  ]
+}
