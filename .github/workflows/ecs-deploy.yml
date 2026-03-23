@@ -63,7 +63,7 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.render-sl.outputs.task-definition }}
-          service: streamlit-service
+          service: streamlit-fastapi-task-service-dpn36ywb
           cluster: streamlit-cluster
           wait-for-service-stability: true
 
